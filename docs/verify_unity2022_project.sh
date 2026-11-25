@@ -88,4 +88,28 @@ else
   echo "覆盖率 G = 0 / ${#GPS[@]} = 0%"
 fi
 echo
+
+# --- 5) MOD-002 自包含场景完整性 ---
+echo "--- [5/5] MOD-002 寻路进阶场景完整性 ---"
+D2="Assets/Scenes/MOD-002"
+if [ -d "$D2" ]; then
+  dtotal=0; dcomplete=0
+  for d in "$D2"/*/; do
+    [ -d "$d" ] || continue
+    dtotal=$((dtotal+1))
+    name=$(basename "$d")
+    sc=$(find "$d" -maxdepth 1 -name '*.unity' 2>/dev/null | wc -l)
+    cs=$(find "$d/Scripts" -maxdepth 1 -name '*.cs' 2>/dev/null | wc -l)
+    rd=$([ -f "$d/README.md" ] && echo 1 || echo 0)
+    if [ "$sc" -ge 1 ] && [ "$cs" -ge 1 ] && [ "$rd" -eq 1 ]; then
+      echo "  [OK]      $name (场景${sc} 脚本${cs} 说明✓)"; dcomplete=$((dcomplete+1))
+    else
+      echo "  [MISSING] $name (场景${sc} 脚本${cs} 说明${rd})"
+    fi
+  done
+  echo "完整场景 = $dcomplete / $dtotal"
+else
+  echo "缺失: $D2（MOD-002 教学场景尚未生成）"
+fi
+echo
 echo "=== 自检结束（只读，未修改任何文件）==="
