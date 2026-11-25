@@ -1,0 +1,11 @@
+# Unity 生成物
+Library/
+Temp/
+Logs/
+UserSettings/
+Obj/
+*.csproj
+*.sln.docstates
+# 系统
+.DS_Store
+Thumbs.db
